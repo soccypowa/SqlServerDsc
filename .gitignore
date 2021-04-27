@@ -1,3 +1,4 @@
 .vscode
 .vs
 output/
+.DS_Store
