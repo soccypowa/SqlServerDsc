@@ -152,6 +152,32 @@ Configuration DSC_SqlRole_Role1_ChangeMembers_Config
 
 <#
     .SYNOPSIS
+        Removes all users from a role.
+        Role1 for the moment have two members.
+#>
+Configuration DSC_SqlRole_Role1_RmoveAllMembers_Config
+{
+    Import-DscResource -ModuleName 'SqlServerDsc'
+
+    node $AllNodes.NodeName
+    {
+        SqlRole 'Integration_Test'
+        {
+            Ensure               = 'Present'
+            ServerRoleName       = $Node.Role1Name
+            ServerName           = $Node.ServerName
+            InstanceName         = $Node.InstanceName
+            Members              = @()
+
+            PsDscRunAsCredential = New-Object `
+                -TypeName System.Management.Automation.PSCredential `
+                -ArgumentList @($Node.Username, (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force))
+        }
+    }
+}
+
+<#
+    .SYNOPSIS
         Adding multiple members to an existing group, saving any previous members.
 #>
 Configuration DSC_SqlRole_Role2_AddMembers_Config
@@ -251,9 +277,9 @@ Configuration DSC_SqlRole_AddNestedRole_Config
             PsDscRunAsCredential = New-Object `
                 -TypeName System.Management.Automation.PSCredential `
                 -ArgumentList @(
-                    $Node.Username,
-                    (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
-                )
+                $Node.Username,
+                (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
+            )
         }
 
         SqlRole $Node.Role5Name
@@ -270,9 +296,9 @@ Configuration DSC_SqlRole_AddNestedRole_Config
             PsDscRunAsCredential = New-Object `
                 -TypeName System.Management.Automation.PSCredential `
                 -ArgumentList @(
-                    $Node.Username,
-                    (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
-                )
+                $Node.Username,
+                (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
+            )
         }
     }
 }
@@ -299,9 +325,9 @@ Configuration DSC_SqlRole_RemoveNestedRole_Config
             PsDscRunAsCredential = New-Object `
                 -TypeName System.Management.Automation.PSCredential `
                 -ArgumentList @(
-                    $Node.Username,
-                    (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
-                )
+                $Node.Username,
+                (ConvertTo-SecureString -String $Node.Password -AsPlainText -Force)
+            )
         }
     }
 }

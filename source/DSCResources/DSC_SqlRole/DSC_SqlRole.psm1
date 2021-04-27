@@ -79,13 +79,13 @@ function Get-TargetResource
     }
 
     return @{
-        ServerRoleName     = $ServerRoleName
-        Ensure             = $ensure
-        ServerName         = $ServerName
-        InstanceName       = $InstanceName
-        Members            = $membersInRole
-        MembersToInclude   = $null
-        MembersToExclude   = $null
+        ServerRoleName   = $ServerRoleName
+        Ensure           = $ensure
+        ServerName       = $ServerName
+        InstanceName     = $InstanceName
+        Members          = $membersInRole
+        MembersToInclude = $null
+        MembersToExclude = $null
     }
 }
 
@@ -155,7 +155,7 @@ function Set-TargetResource
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @(
             'Members'
         )
@@ -237,7 +237,7 @@ function Set-TargetResource
 
                 $correctedParameters = Get-CorrectedMemberParameters @originalParameters
 
-                if ($Members)
+                if ($PSBoundParameters.ContainsKey('Members'))
                 {
                     $memberNamesInRoleObject = $sqlServerObject.Roles[$ServerRoleName].EnumMemberNames()
 
@@ -327,7 +327,7 @@ function Set-TargetResource
 #>
 function Test-TargetResource
 {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is called when Get-TargetResource is called')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification = 'The command Connect-Sql is called when Get-TargetResource is called')]
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
@@ -371,7 +371,7 @@ function Test-TargetResource
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @(
             'Members'
         )
@@ -392,9 +392,9 @@ function Test-TargetResource
     $correctedParameters = Get-CorrectedMemberParameters @originalParameters
 
     $getTargetResourceParameters = @{
-        InstanceName     = $InstanceName
-        ServerName       = $ServerName
-        ServerRoleName   = $ServerRoleName
+        InstanceName   = $InstanceName
+        ServerName     = $ServerName
+        ServerRoleName = $ServerRoleName
     }
 
     $getTargetResourceResult = Get-TargetResource @getTargetResourceParameters
@@ -428,7 +428,7 @@ function Test-TargetResource
             }
             else
             {
-                if ($Members)
+                if ($PSBoundParameters.ContainsKey('Menmbers'))
                 {
                     if ( $null -ne (Compare-Object -ReferenceObject $getTargetResourceResult.Members -DifferenceObject $correctedParameters.Members))
                     {
