@@ -237,7 +237,7 @@ function Set-TargetResource
 
                 $correctedParameters = Get-CorrectedMemberParameters @originalParameters
 
-                if ($Members)
+                if ($PSBoundParameters.ContainsKey('Members'))
                 {
                     $memberNamesInRoleObject = $sqlServerObject.Roles[$ServerRoleName].EnumMemberNames()
 
