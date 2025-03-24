@@ -428,7 +428,7 @@ function Test-TargetResource
             }
             else
             {
-                if ($Members)
+                if ($PSBoundParameters.ContainsKey('Members'))
                 {
                     if ( $null -ne (Compare-Object -ReferenceObject $getTargetResourceResult.Members -DifferenceObject $correctedParameters.Members))
                     {
